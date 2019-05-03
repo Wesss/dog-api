@@ -2,3 +2,5 @@ logging:
   level: INFO
   loggers:
     com.wes-develop: DEBUG
+template: Hello, %s!
+defaultName: Stranger
