@@ -3,31 +3,44 @@ package com.wesdevelop.dogapi.resources;
 import com.wesdevelop.dogapi.api.Dog;
 import com.codahale.metrics.annotation.Timed;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.ArrayList;
 import java.util.Optional;
 
-@Path("/hello")
+@Path("/dogs")
 @Produces(MediaType.APPLICATION_JSON)
 public class DogResource {
-    private final String template;
-    private final String defaultName;
-    private final AtomicLong counter;
-
-    public DogResource(String template, String defaultName) {
-        this.template = template;
-        this.defaultName = defaultName;
-        this.counter = new AtomicLong();
+    public DogResource() {
     }
 
     @GET
     @Timed
-    public Dog sayHello(@QueryParam("name") Optional<String> name) {
-        final String value = String.format(template, name.orElse(defaultName));
-        return new Dog(counter.incrementAndGet(), value);
+    public ArrayList<Dog> getDogs() {
+        ArrayList<Dog> dogs = new ArrayList<>();
+        dogs.add(new Dog(1, "Rufus", "Max", "Generic Dog!"));
+        dogs.add(new Dog(2, "Bone", "Sarah", "Moar Dog!"));
+        return dogs;
     }
+
+    @POST
+    @Consumes("application/json")
+    @Timed
+    public Dog addDog(Dog dog) {
+        return dog;
+    }
+
+    @GET
+    @Path("/{id}")
+    @Consumes("application/json")
+    @Timed
+    public Dog getDog(@PathParam("id") long id) {
+        return new Dog(1, "Rufus", "Max", "Generic Dog!");
+    }
+    // @GET
+    // @Timed
+    // public Dog sayHello(@QueryParam("name") Optional<String> name) {
+    //     final String value = String.format(template, name.orElse(defaultName));
+    //     return new Dog(counter.incrementAndGet(), value);
+    // }
 }

@@ -1,21 +1,22 @@
 package com.wesdevelop.dogapi.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.validator.constraints.Length;
 
 public class Dog {
     private long id;
-
-    @Length(max = 3)
-    private String content;
+    private String name;
+    private String ownerName;
+    private String notes;
 
     public Dog() {
         // Jackson deserialization
     }
 
-    public Dog(long id, String content) {
+    public Dog(long id, String name, String ownerName, String notes) {
         this.id = id;
-        this.content = content;
+        this.name = name;
+        this.ownerName = ownerName;
+        this.notes = notes;
     }
 
     @JsonProperty
@@ -24,7 +25,17 @@ public class Dog {
     }
 
     @JsonProperty
-    public String getContent() {
-        return content;
+    public String getName() {
+        return name;
+    }
+
+    @JsonProperty
+    public String getOwnerName() {
+        return ownerName;
+    }
+
+    @JsonProperty
+    public String getNotes() {
+        return notes;
     }
 }

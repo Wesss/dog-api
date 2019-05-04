@@ -10,6 +10,13 @@ This was setup on a Windows OS, TODO add more notes about assumptions
 setup using drop wizard, TODO motivations
 
 ```
+mvn package
+java -jar target/dogapi-1.0-SNAPSHOT.jar config.yml
+```
+
+TODO VALIDATION
+
+```
 Your assignment is to create a RESTful API to track important information about our office dogs. A dog’s schema should contain a unique ID, the dog’s name, the dog’s owner’s name, and notes about the dog. The methods and endpoints should be:
 
 GET /dogs - List all dogs
