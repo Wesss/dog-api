@@ -23,6 +23,7 @@ public class DogResource {
         return dogs;
     }
 
+    // TODO VALIDATION?
     @POST
     @Consumes("application/json")
     @Timed
@@ -32,15 +33,25 @@ public class DogResource {
 
     @GET
     @Path("/{id}")
-    @Consumes("application/json")
     @Timed
     public Dog getDog(@PathParam("id") long id) {
         return new Dog(1, "Rufus", "Max", "Generic Dog!");
     }
-    // @GET
-    // @Timed
-    // public Dog sayHello(@QueryParam("name") Optional<String> name) {
-    //     final String value = String.format(template, name.orElse(defaultName));
-    //     return new Dog(counter.incrementAndGet(), value);
-    // }
+
+    // TODO updated http return?
+    @PUT
+    @Path("/{id}")
+    @Consumes("application/json")
+    @Timed
+    public Dog updateDog(@PathParam("id") long id, Dog dog) {
+        return dog;
+    }
+
+    // TODO deleted http return?
+    @DELETE
+    @Path("/{id}")
+    @Timed
+    public Dog deleteDog(@PathParam("id") long id) {
+        return new Dog(1, "Rufus", "Max", "Generic Dog!");
+    }
 }
