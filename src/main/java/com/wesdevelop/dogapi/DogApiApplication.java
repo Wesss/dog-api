@@ -1,5 +1,8 @@
 package com.wesdevelop.dogapi;
 
+import com.wesdevelop.dogapi.api.Dog;
+import com.wesdevelop.dogapi.db.Dao;
+import com.wesdevelop.dogapi.db.LocalJsonFileDao;
 import com.wesdevelop.dogapi.resources.DogResource;
 import io.dropwizard.Configuration;
 
@@ -25,7 +28,8 @@ public class DogApiApplication extends Application<Configuration> {
     @Override
     public void run(final Configuration configuration,
                     final Environment environment) {
-        final DogResource resource = new DogResource();
+        final Dao<Dog> dao = new LocalJsonFileDao();
+        final DogResource resource = new DogResource(dao);
         environment.jersey().register(resource);
     }
 
