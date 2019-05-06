@@ -11,7 +11,7 @@ setup using drop wizard, TODO motivations
 
 ```
 mvn package
-java -jar target/dogapi-1.0-SNAPSHOT.jar config.yml
+java -jar target/dogapi-1.0-SNAPSHOT.jar server config.yml
 ```
 
 ```

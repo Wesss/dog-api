@@ -24,6 +24,10 @@ public class Dog {
         return id;
     }
 
+    public Dog withId(long id) {
+        return new Dog(id, this.name, this.ownerName, this.notes);
+    }
+
     @JsonProperty
     public String getName() {
         return name;

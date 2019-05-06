@@ -1,17 +1,15 @@
 package com.wesdevelop.dogapi.db;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 
 public interface Dao<T> {
      
-    Optional<T> get(long id) throws Exception;
+    Optional<T> get(long id) throws DaoException;
      
-    List<T> getAll() throws Exception;
+    Collection<T> getAll() throws DaoException;
      
-    void create(T t) throws Exception;
+    void upsert(T t) throws DaoException;
      
-    void update(long id, T t) throws Exception;
-     
-    void delete(long id) throws Exception;
+    void delete(long id) throws DaoException;
 }

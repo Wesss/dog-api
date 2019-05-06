@@ -2,13 +2,14 @@ package com.wesdevelop.dogapi.resources;
 
 import com.wesdevelop.dogapi.api.Dog;
 import com.wesdevelop.dogapi.db.Dao;
+import com.wesdevelop.dogapi.db.DaoException;
 import com.codahale.metrics.annotation.Timed;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Optional;
 
 @Path("/dogs")
 @Produces(MediaType.APPLICATION_JSON)
@@ -23,23 +24,31 @@ public class DogResource {
     @GET
     @Path("/{id}")
     @Timed
-    public Dog getDog(@PathParam("id") long id) throws Exception {
-        Dog dog;
+    public Dog getDog(@PathParam("id") long id) {
+        Optional<Dog> dog;
         try {
-            dog = dao.get(id).get();
-        } catch (Exception e) {
+            dog = dao.get(id);
+        } catch (DaoException e) {
+            // TODO
             throw e;
         }
-        return dog;
+        if (dog.isPresent()) {
+            return dog.get();
+        } else {
+            // TODO 404
+            return null;
+        }
     }
 
     @GET
     @Timed
-    public ArrayList<Dog> getDogs() {
-        ArrayList<Dog> dogs = new ArrayList<>();
-        dogs.add(new Dog(1, "Rufus", "Max", "Generic Dog!"));
-        dogs.add(new Dog(2, "Bone", "Sarah", "Moar Dog!"));
-        return dogs;
+    public Collection<Dog> getDogs() {
+        try {
+            return dao.getAll();
+        } catch (DaoException e) {
+            // TODO
+            throw e;
+        }
     }
 
     // TODO VALIDATION?
@@ -48,8 +57,10 @@ public class DogResource {
     @Timed
     public Dog addDog(Dog dog) throws Exception {
         try {
-            dao.create(dog);
-        } catch (Exception e) {
+            // TODO create ID
+            dao.upsert(dog);
+        } catch (DaoException e) {
+            // TODO
             throw e;
         }
         return dog;
@@ -61,14 +72,27 @@ public class DogResource {
     @Consumes("application/json")
     @Timed
     public Dog updateDog(@PathParam("id") long id, Dog dog) {
-        return dog;
+        Dog dogWithId = dog.withId(id);
+        try {
+            dao.upsert(dogWithId);
+        } catch (DaoException e) {
+            // TODO
+            throw e;
+        }
+        return dogWithId;
     }
 
     // TODO deleted http return?
     @DELETE
     @Path("/{id}")
     @Timed
-    public Dog deleteDog(@PathParam("id") long id) {
-        return new Dog(1, "Rufus", "Max", "Generic Dog!");
+    public void deleteDog(@PathParam("id") long id) {
+        try {
+            dao.delete(id);
+        } catch (DaoException e) {
+            // TODO
+            throw e;
+        }
+        // TODO return deleted
     }
 }
