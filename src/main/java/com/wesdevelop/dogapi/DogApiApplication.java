@@ -5,10 +5,10 @@ import com.wesdevelop.dogapi.db.Dao;
 import com.wesdevelop.dogapi.db.LocalJsonFileDao;
 import com.wesdevelop.dogapi.resources.DogResource;
 import io.dropwizard.Configuration;
-
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.slf4j.LoggerFactory;
 
 public class DogApiApplication extends Application<Configuration> {
 
@@ -28,8 +28,8 @@ public class DogApiApplication extends Application<Configuration> {
     @Override
     public void run(final Configuration configuration,
                     final Environment environment) {
-        final Dao<Dog> dao = new LocalJsonFileDao();
-        final DogResource resource = new DogResource(dao);
+        final Dao<Dog> dao = new LocalJsonFileDao(LoggerFactory.getLogger(LocalJsonFileDao.class));
+        final DogResource resource = new DogResource(dao, LoggerFactory.getLogger(DogResource.class));
         environment.jersey().register(resource);
     }
 

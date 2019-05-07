@@ -2,18 +2,14 @@ package com.wesdevelop.dogapi.db;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.wesdevelop.dogapi.api.Dog;
 
 public class LocalJsonFileDao implements Dao<Dog> {
@@ -22,10 +18,10 @@ public class LocalJsonFileDao implements Dao<Dog> {
     private File jsonFile;
     private Logger logger;
 
-    public LocalJsonFileDao() {
+    public LocalJsonFileDao(Logger logger) {
         this.mapper = new ObjectMapper();
         this.jsonFile = new File(".\\dogs.json");
-        this.logger = LoggerFactory.getLogger("LocalJsonFileDao");
+        this.logger = logger;
     }
 
     public Optional<Dog> get(long id) {
@@ -57,11 +53,14 @@ public class LocalJsonFileDao implements Dao<Dog> {
     }
 
     private Map<Long, Dog> readDogs() throws DaoException {
+        if (!jsonFile.exists()) {
+            return new HashMap<>();
+        }
         try {
             return mapper.readValue(jsonFile, new TypeReference<Map<Long, Dog>>(){});
         } catch (IOException e) {
-            // TODO log?
-            throw new DaoException("Unable to access Dog json", e);
+            this.logger.error("Unable to read dog json file", e);
+            throw new DaoException("Unable to read dog json fil", e);
         }
     }
 
@@ -69,8 +68,8 @@ public class LocalJsonFileDao implements Dao<Dog> {
         try {
             mapper.writeValue(jsonFile, dogs);
         } catch (IOException e) {
-            // TODO log?
-            throw new DaoException("Unable to save Dog json", e);
+            this.logger.error("Unable to save dog json file", e);
+            throw new DaoException("Unable to save dog json fil", e);
         }
     }
 }
